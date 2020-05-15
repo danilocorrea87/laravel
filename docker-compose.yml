@@ -1,0 +1,46 @@
+version: "3.7"
+
+networks:
+    application:
+        driver: bridge
+        name: application
+volumes:
+    storage:
+        driver: local
+        name: storage
+
+services:
+    app:
+        image: 'danilosilva87/environment-php:7.3'
+        container_name: 'app'
+        ports:
+            - '80:8080'
+        volumes:
+            - .:/home/php/app
+        networks:
+            - application
+    redis:
+        image: 'redis'
+        container_name: 'redis'
+        ports:
+            - '6380:6380'
+        networks:
+            - application
+    bd:
+        image: 'mysql:5.7'
+        container_name: 'bd'
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=test
+            - MYSQL_DATABASE=test
+            - MYSQL_USER=test
+            - MYSQL_PASSWORD=test
+        ports:
+            - '3306:3306'
+        volumes:
+            - storage:/var/lib/mysql
+        networks:
+            - application
+
+
+
