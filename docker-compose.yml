@@ -11,12 +11,21 @@ volumes:
 
 services:
     app:
-        image: 'danilosilva87/environment-php:7.3'
+        image: 'danilosilva87/environment-php:7.3-fpm-alpine'
         container_name: 'app'
         ports:
-            - '80:8080'
+            - '9000:9000'
         volumes:
-            - .:/home/php/app
+            - .:/home/app/php
+        networks:
+            - application
+    nginx:
+        image: 'danilosilva87/nginx'
+        container_name: 'nginx'
+        ports:
+            - '80:80'
+        volumes:
+            - .:/home/app/php
         networks:
             - application
     redis:
